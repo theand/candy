@@ -33,11 +33,11 @@ scripts/swift.sh test
 scripts/build-app.sh
 
 out="$PWD/dist/releases/$version"
-app="$out/Candy.app"
-archive="Candy-$version-macos-arm64.zip"
+app="$out/Candy-theand-fork.app"
+archive="Candy-theand-fork-$version-macos-arm64.zip"
 mkdir -p "$out"
 rm -rf "$app"
-ditto dist/Candy.app "$app"
+ditto dist/Candy-theand-fork.app "$app"
 [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Contents/Info.plist")" == "$version" ]] || fail "App version mismatch."
 [[ "$("$app/Contents/Helpers/candy" --version)" == "candy $version" ]] || fail "CLI version mismatch."
 for executable in "$app/Contents/Helpers/candy" "$app/Contents/MacOS/Candy"; do

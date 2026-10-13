@@ -49,9 +49,9 @@ xcrun notarytool history --keychain-profile candy-notary
    cache, prefix the command with `CANDY_SWIFT_BUILD_SYSTEM=native` to select
    SwiftPM's native build engine for this release process. The same builds and
    tests still run; this does not change the system's Xcode settings.
-4. Outputs are in `dist/releases/<version>/`: the signed `Candy.app`,
-   `Candy-<version>-macos-arm64.zip`, `SHA256SUMS`, and Apple's submission result.
-   Only the ZIP and checksum file are published. The ordinary `dist/Candy.app`
+4. Outputs are in `dist/releases/<version>/`: the signed `Candy-theand-fork.app`,
+   `Candy-theand-fork-<version>-macos-arm64.zip`, `SHA256SUMS`, and Apple's submission result.
+   Only the ZIP and checksum file are published. The ordinary `dist/Candy-theand-fork.app`
    remains an ad-hoc signed development build.
 5. Unzip the final ZIP into a temporary directory and verify its signature and
    ticket. Test launch, CLI version, an image edit, and text detection. Check
@@ -75,9 +75,12 @@ git tag -a v0.1.0 -m "Candy 0.1.0"
 git push origin main v0.1.0
 gh release create v0.1.0 --verify-tag --title "Candy 0.1.0" \
   --notes-file docs/releases/0.1.0.md \
-  dist/releases/0.1.0/Candy-0.1.0-macos-arm64.zip \
+  dist/releases/0.1.0/Candy-theand-fork-0.1.0-macos-arm64.zip \
   dist/releases/0.1.0/SHA256SUMS
 ```
+
+The following Homebrew and website steps describe upstream publication, not
+local fork installation.
 
 In `rath/homebrew-tap`, update `Casks/candy.rb` with the version and ZIP's SHA-256.
 The Cask installs `Candy.app` and links `Contents/Helpers/candy` into Homebrew's

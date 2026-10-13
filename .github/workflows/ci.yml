@@ -22,8 +22,8 @@ jobs:
       - run: scripts/build-app.sh --debug
       - run: scripts/swift.sh test
       - run: scripts/build-app.sh
-      - run: ditto -c -k --sequesterRsrc --keepParent dist/Candy.app dist/Candy-macOS.zip
+      - run: ditto -c -k --sequesterRsrc --keepParent dist/Candy-theand-fork.app dist/Candy-theand-fork-macOS.zip
       - uses: actions/upload-artifact@v7
         with:
-          name: Candy-macOS
-          path: dist/Candy-macOS.zip
+          name: Candy-theand-fork-macOS
+          path: dist/Candy-theand-fork-macOS.zip

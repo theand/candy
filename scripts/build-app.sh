@@ -17,7 +17,7 @@ scripts/swift.sh build -c "$candy_profile"
 candy_swift_bin=$(scripts/swift.sh build -c "$candy_profile" --show-bin-path)
 mkdir -p "$candy_root/dist"
 candy_stage=$(mktemp -d "$candy_root/dist/.candy-build.XXXXXX")
-candy_destination="$candy_root/dist/Candy.app"
+candy_destination="$candy_root/dist/Candy-theand-fork.app"
 cleanup() {
     if [ ! -e "$candy_destination" ] && [ -e "$candy_stage/previous.app" ]; then
         mv "$candy_stage/previous.app" "$candy_destination" || return 1
@@ -26,7 +26,7 @@ cleanup() {
 }
 trap cleanup EXIT
 trap 'exit 1' HUP INT TERM
-candy_app="$candy_stage/Candy.app"
+candy_app="$candy_stage/Candy-theand-fork.app"
 mkdir -p "$candy_app/Contents/MacOS" "$candy_app/Contents/Resources" "$candy_app/Contents/Helpers"
 cp "$candy_swift_bin/Candy" "$candy_app/Contents/MacOS/Candy"
 # SwiftPM leaves the symbol table in the linked executable, and the Rust
@@ -46,9 +46,9 @@ cat > "$candy_app/Contents/Info.plist" <<'PLIST'
     <key>CFBundleDevelopmentRegion</key><string>en</string>
     <key>CFBundleLocalizations</key><array><string>en</string><string>ko</string><string>ja</string></array>
     <key>CFBundleExecutable</key><string>Candy</string>
-    <key>CFBundleIdentifier</key><string>me.told.candy.app</string>
-    <key>CFBundleName</key><string>Candy</string>
-    <key>CFBundleDisplayName</key><string>Candy</string>
+    <key>CFBundleIdentifier</key><string>me.told.candy.theand-fork.app</string>
+    <key>CFBundleName</key><string>Candy-theand-fork</string>
+    <key>CFBundleDisplayName</key><string>Candy-theand-fork</string>
     <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>0</string>

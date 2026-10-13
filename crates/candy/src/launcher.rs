@@ -7,7 +7,7 @@ use std::{
     process::Command,
 };
 
-const BUNDLE_ID: &str = "me.told.candy.app";
+const BUNDLE_ID: &str = "me.told.candy.theand-fork.app";
 
 /// LaunchServices opens documents asynchronously. Transfer ownership of this
 /// private PNG to the app only after `open` succeeds; the app removes it after
@@ -61,7 +61,7 @@ fn resolve_app(explicit: Option<PathBuf>, executable: &Path) -> Result<Option<Pa
     if let Some(path) = explicit {
         ensure!(
             valid_app(&path),
-            "CANDY_APP must point to a built Candy.app: {}",
+            "CANDY_APP must point to a built Candy-theand-fork.app: {}",
             path.display()
         );
         return Ok(Some(path));
@@ -70,12 +70,12 @@ fn resolve_app(explicit: Option<PathBuf>, executable: &Path) -> Result<Option<Pa
         if parent.extension().is_some_and(|ext| ext == "app") && valid_app(parent) {
             return Ok(Some(parent.to_owned()));
         }
-        let sibling = parent.join("Candy.app");
+        let sibling = parent.join("Candy-theand-fork.app");
         if valid_app(&sibling) {
             return Ok(Some(sibling));
         }
         if parent.join("Cargo.toml").is_file() {
-            let local = parent.join("dist/Candy.app");
+            let local = parent.join("dist/Candy-theand-fork.app");
             if valid_app(&local) {
                 return Ok(Some(local));
             }
@@ -121,7 +121,7 @@ fn run_open(mut command: Command) -> Result<()> {
         .context("Cannot contact macOS LaunchServices")?;
     if !status.success() {
         bail!(
-            "Cannot launch Candy.app. Build it with scripts/build-app.sh, install it in Applications, or set CANDY_APP to its path. cargo install installs only the CLI."
+            "Cannot launch Candy-theand-fork.app. Build it with scripts/build-app.sh, install it in Applications, or set CANDY_APP to its path. cargo install installs only the CLI."
         );
     }
     Ok(())
@@ -179,10 +179,22 @@ mod tests {
         );
     }
     #[test]
+    fn discovers_fork_beside_upstream_app() {
+        let dir = tempfile::tempdir().unwrap();
+        let fork = dir.path().join("Candy-theand-fork.app");
+        app(&fork);
+        app(&dir.path().join("Candy.app"));
+        assert_eq!(
+            resolve_app(None, &dir.path().join("bin/candy")).unwrap(),
+            Some(fork)
+        );
+    }
+    #[test]
     fn discovers_bundle_and_repository_build_without_working_directory() {
         let dir = tempfile::tempdir().unwrap();
-        let path = dir.path().join("dist/Candy.app");
+        let path = dir.path().join("dist/Candy-theand-fork.app");
         app(&path);
+        app(&dir.path().join("dist/Candy.app"));
         let bundled = path.join("Contents/Helpers/candy");
         assert_eq!(resolve_app(None, &bundled).unwrap(), Some(path.clone()));
         std::fs::write(dir.path().join("Cargo.toml"), "test").unwrap();
