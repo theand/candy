@@ -17,7 +17,7 @@ live in the SwiftPM package under `macos`.
 - Run `scripts/build-app.sh --debug` then `scripts/swift.sh test` for Swift/FFI
   changes. The Swift wrapper keeps caches local and disables nested manifest
   sandboxing; Vision integration tests require normal macOS pixel-buffer access.
-- `scripts/build-app.sh` builds the release bundle at `dist/Candy.app`;
+- `scripts/build-app.sh` builds the release bundle at `dist/Candy-theand-fork.app`;
   `--debug` selects a debug build. Rebuild the bundle after changing code before
   verifying the app, then relaunch it. The GUI executable is
   `Contents/MacOS/Candy`; the CLI is `Contents/Helpers/candy`. Never put both
@@ -31,6 +31,18 @@ live in the SwiftPM package under `macos`.
 - Test fixtures are synthetic. Regenerate with
   `swift scripts/make-fixtures.swift crates/candy-macos/tests/fixtures`.
   Do not add personal screenshots or contact details as fixtures.
+
+## Fork packaging and local installation
+
+- Work on `theand-fork`; keep upstream changes available for later rebase.
+- Reuse `.agents/skills/ciao-package-macos-dmg` (Mackup SSOT), not a separate
+  Candy packaging skill. Build fresh with `scripts/build-app.sh`, then package
+  `dist/Candy-theand-fork.app`. See `docs/releasing.md` for the command.
+- Install the exact verified DMG bundle at `/Applications/Candy-theand-fork.app`,
+  preserving its signature. Quit the target normally before replacing it.
+  Compare installed and mounted executables and verify the installed signature.
+- The fork bundle ID is `me.told.candy.theand-fork.app`. Never install this fork
+  as `/Applications/Candy.app`, which belongs to the upstream Homebrew app.
 
 ## AppKit and Rust boundary
 
