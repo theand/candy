@@ -156,7 +156,7 @@ public final class CandyApplication: NSObject, NSApplicationDelegate, NSMenuItem
   private func installStatusItem() {
     let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     item.button?.image = Self.statusIcon()
-    item.button?.toolTip = "Candy"
+    item.button?.toolTip = "Candy-theand-fork"
     let menu = NSMenu(title: "Candy")
     let show = NSMenuItem(
       title: localized("Show Candy"), action: #selector(showEditor(_:)), keyEquivalent: "")

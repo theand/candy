@@ -2,6 +2,16 @@
 
 # Candy
 
+This fork installs as `Candy-theand-fork.app` with a separate bundle identifier
+(`me.told.candy.theand-fork.app`), so it can coexist with Homebrew's upstream
+Candy. Local builds use `dist/Candy-theand-fork.app`; install the fork with:
+
+```sh
+scripts/build-app.sh
+ditto dist/Candy-theand-fork.app /Applications/Candy-theand-fork.app
+open /Applications/Candy-theand-fork.app
+```
+
 A small image tool for your Mac. View an image in a Kitty-compatible terminal,
 then open a lightweight editor when you need to change it.
 
@@ -45,26 +55,26 @@ Install just the CLI into Cargo's bin directory (make sure it is on your PATH):
 cargo install --locked --path crates/candy
 ```
 
-`cargo install` does not build the Swift editor. Build `dist/Candy.app` with the
+`cargo install` does not build the Swift editor. Build `dist/Candy-theand-fork.app` with the
 script above and open it, or copy it to `/Applications` or `~/Applications`:
 
 ```sh
-open dist/Candy.app
+open dist/Candy-theand-fork.app
 ```
 
 The bundle includes a CLI at `Contents/Helpers/candy`. The GUI executable is
 `Contents/MacOS/Candy`; they are in separate directories for case-insensitive
 macOS filesystems. The CLI uses `CANDY_APP` when set, otherwise a bundle beside
-or containing the executable, a repository `dist/Candy.app`, or the app
+or containing the executable, a repository `dist/Candy-theand-fork.app`, or the app
 registered with LaunchServices. An invalid `CANDY_APP` is reported explicitly.
 
 ```sh
-CANDY_APP=/path/to/Candy.app candy edit photo.png
+CANDY_APP=/path/to/Candy-theand-fork.app candy edit photo.png
 ```
 
 The script builds for the current architecture; `--debug` selects a debug build.
 The bundle is ad-hoc signed for local use, not Developer ID signed or notarized.
-Each build stages a clean bundle before replacing `dist/Candy.app`.
+Each build stages a clean bundle before replacing `dist/Candy-theand-fork.app`.
 Open images from the File menu, drag and drop, Finder Open With, or the CLI.
 Candy stays in the menu bar without a Dock icon. Use its menu bar icon to show
 the editor, access File/Edit/View/Tools/Window commands, or quit. Closing the
@@ -258,14 +268,14 @@ does not ship a table. To see a translated interface without changing system
 settings, pass the language to that process only:
 
 ```sh
-open -n -a dist/Candy.app --args -AppleLanguages '(ko)'
-open -n -a dist/Candy.app --args -AppleLanguages '(ja)'
+open -n -a dist/Candy-theand-fork.app --args -AppleLanguages '(ko)'
+open -n -a dist/Candy-theand-fork.app --args -AppleLanguages '(ja)'
 ```
 
 Debug builds support a process-only appearance override for visual checks:
 
 ```sh
-CANDY_TEST_APPEARANCE=dark dist/Candy.app/Contents/MacOS/Candy
+CANDY_TEST_APPEARANCE=dark dist/Candy-theand-fork.app/Contents/MacOS/Candy
 ```
 
 Quit any existing test instance first. This does not change system preferences
