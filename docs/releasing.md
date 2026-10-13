@@ -1,5 +1,28 @@
 # Releasing Candy
 
+## Local fork DMG
+
+The `theand-fork` branch builds `Candy-theand-fork.app` with its own bundle ID.
+Use the shared project-local `ciao-package-macos-dmg` skill for DMG creation
+and installation; no separate project skill is needed. Its packaging script
+can be run from this repository after a fresh Release build:
+
+```sh
+scripts/build-app.sh
+bash .agents/skills/ciao-package-macos-dmg/scripts/package_dmg.sh \
+  --app dist/Candy-theand-fork.app
+```
+
+Add `--overwrite` only to intentionally replace the same versioned DMG.
+For installation, quit the fork normally, mount the verified DMG read-only,
+and copy its `Candy-theand-fork.app` to `/Applications/Candy-theand-fork.app`.
+Preserve the signature, verify the installed signature and executable checksum
+against the mounted app, detach the DMG, and launch the installed app.
+Never use `/Applications/Candy.app`, the upstream Homebrew destination.
+Local builds are ad-hoc signed; DMG packaging does not notarize them.
+
+## Public distribution
+
 Releases currently target **Apple Silicon on macOS 14+**. Build on an Apple
 Silicon Mac with Rust 1.95+ and Xcode 16+ (Swift 6). CI checks source builds;
 the maintainer's Mac signs and notarizes public release artifacts.
