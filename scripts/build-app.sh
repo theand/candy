@@ -54,6 +54,7 @@ cat > "$candy_app/Contents/Info.plist" <<'PLIST'
     <key>CFBundleShortVersionString</key><string>0</string>
     <key>CFBundleVersion</key><string>0</string>
     <key>LSMinimumSystemVersion</key><string>14.0</string>
+    <key>LSUIElement</key><true/>
     <key>NSHighResolutionCapable</key><true/>
     <key>NSPrincipalClass</key><string>NSApplication</string>
     <key>CFBundleDocumentTypes</key><array><dict>
