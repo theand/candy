@@ -6,10 +6,12 @@ public final class CandyApplication: NSObject, NSApplicationDelegate, NSMenuItem
   private var editors: [UUID: EditorWindow] = [:]
   private var terminating = false
   private var queuedURLs: [URL] = []
+  private(set) var statusItem: NSStatusItem?
   public override init() { super.init() }
   public func applicationDidFinishLaunching(_ notification: Notification) {
-    NSApp.setActivationPolicy(.regular)
+    NSApp.setActivationPolicy(.accessory)
     installMenu()
+    installStatusItem()
     if editors.isEmpty { showEmpty() }
     NSApp.activate(ignoringOtherApps: true)
   }
@@ -17,7 +19,7 @@ public final class CandyApplication: NSObject, NSApplicationDelegate, NSMenuItem
   public func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows: Bool)
     -> Bool
   {
-    if !hasVisibleWindows { showEmpty() }
+    showEditor(sender)
     return true
   }
   public func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -41,6 +43,18 @@ public final class CandyApplication: NSObject, NSApplicationDelegate, NSMenuItem
     guard !terminating else { return }
     makeEditor().showWindow(nil)
   }
+  @objc func showEditor(_ sender: Any?) {
+    guard !terminating else { return }
+    if editors.isEmpty {
+      showEmpty()
+    } else {
+      for editor in editors.values {
+        editor.window?.deminiaturize(nil)
+        editor.showWindow(nil)
+      }
+    }
+    NSApp.activate(ignoringOtherApps: true)
+  }
   private func open(_ urls: [URL]) {
     if terminating {
       queuedURLs.append(contentsOf: urls)
@@ -60,6 +74,7 @@ public final class CandyApplication: NSObject, NSApplicationDelegate, NSMenuItem
   }
   @objc public func openDocument(_ sender: Any?) {
     guard !terminating else { return }
+    NSApp.activate(ignoringOtherApps: true)
     let panel = NSOpenPanel()
     panel.allowsMultipleSelection = true
     panel.canChooseDirectories = false
@@ -112,6 +127,7 @@ public final class CandyApplication: NSObject, NSApplicationDelegate, NSMenuItem
       return .terminateCancel
     }
     terminating = true
+    sender.activate(ignoringOtherApps: true)
     // Stable identities: later Open events are queued until the decision ends.
     let documents = Array(editors.values)
     for editor in documents { editor.interactionBlocked = true }
@@ -136,6 +152,59 @@ public final class CandyApplication: NSObject, NSApplicationDelegate, NSMenuItem
         self.open(urls)
       }
     }
+  }
+  private func installStatusItem() {
+    let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    item.button?.image = Self.statusIcon()
+    item.button?.toolTip = "Candy"
+    let menu = NSMenu(title: "Candy")
+    let show = NSMenuItem(
+      title: localized("Show Candy"), action: #selector(showEditor(_:)), keyEquivalent: "")
+    show.target = self
+    menu.addItem(show)
+    menu.addItem(.separator())
+    // Keep every editing command reachable when accessory mode hides the app menu bar.
+    for entry in NSApp.mainMenu?.items.dropFirst() ?? [] {
+      menu.addItem(entry.copy() as! NSMenuItem)
+    }
+    menu.addItem(.separator())
+    let quit = NSMenuItem(
+      title: localized("Quit Candy"), action: #selector(NSApplication.terminate(_:)),
+      keyEquivalent: "q")
+    quit.target = NSApp
+    menu.addItem(quit)
+    item.menu = menu
+    statusItem = item
+  }
+  static func statusIcon() -> NSImage {
+    let image = NSImage(size: NSSize(width: 18, height: 18), flipped: false) { _ in
+      NSColor.black.setFill()
+      NSColor.black.setStroke()
+      let stick = NSBezierPath()
+      stick.move(to: NSPoint(x: 9, y: 6))
+      stick.line(to: NSPoint(x: 10.5, y: 1.5))
+      stick.lineWidth = 2
+      stick.lineCapStyle = .round
+      stick.stroke()
+      NSBezierPath(ovalIn: NSRect(x: 1.5, y: 5, width: 12, height: 12)).fill()
+      // Cut the original lollipop's spiral out so AppKit can tint the template.
+      NSGraphicsContext.current?.cgContext.setBlendMode(.clear)
+      let spiral = NSBezierPath()
+      for step in 0...100 {
+        let angle = Double(step) / 100 * 2.5 * .pi
+        let radius = 0.6 + Double(step) / 100 * 4.1
+        let point = NSPoint(x: 7.5 + cos(angle) * radius, y: 11 + sin(angle) * radius)
+        if step == 0 { spiral.move(to: point) } else { spiral.line(to: point) }
+      }
+      spiral.lineWidth = 1.25
+      spiral.lineCapStyle = .round
+      spiral.stroke()
+      NSGraphicsContext.current?.cgContext.setBlendMode(.normal)
+      return true
+    }
+    image.isTemplate = true
+    image.accessibilityDescription = "Candy"
+    return image
   }
   private func installMenu() {
     let bar = NSMenu()

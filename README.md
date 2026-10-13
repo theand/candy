@@ -66,6 +66,9 @@ The script builds for the current architecture; `--debug` selects a debug build.
 The bundle is ad-hoc signed for local use, not Developer ID signed or notarized.
 Each build stages a clean bundle before replacing `dist/Candy.app`.
 Open images from the File menu, drag and drop, Finder Open With, or the CLI.
+Candy stays in the menu bar without a Dock icon. Use its menu bar icon to show
+the editor, access File/Edit/View/Tools/Window commands, or quit. Closing the
+last editor window keeps Candy running; quitting still confirms unsaved changes.
 The bundle declares supported document types without changing your default
 image application.
 

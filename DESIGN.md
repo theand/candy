@@ -128,7 +128,12 @@ Interface text follows the macOS language: English, or Korean or Japanese when m
 
 ### Application icon
 
-Finder, the Dock, and the About panel show `macos/Resources/AppIcon.icns`: a cream lollipop with a coral Archimedean spiral (2.25 turns), tilted −18° on a deep rust superellipse. The superellipse fills the standard 824 px area of the 1024 px canvas, so current macOS presents it without an added backing plate. The 16 pt slot uses simplified artwork with 1.25 turns and a thicker stick; 32 pt and larger use the full artwork. Colors are `#9C4432`–`#6B2A1E` (background gradient), `#FFF4EC` (cream), and `#F08A72` (coral). They identify the application outside its windows and are not interface tokens.
+Candy resides in the menu bar with an 18 pt monochrome lollipop template,
+retaining the application icon's spiral and tilted stick, and no Dock icon.
+Its status menu provides Show Candy, the existing
+editing submenus, and Quit Candy. Closing the last window leaves it running.
+
+Finder and the About panel show `macos/Resources/AppIcon.icns`: a cream lollipop with a coral Archimedean spiral (2.25 turns), tilted −18° on a deep rust superellipse. The superellipse fills the standard 824 px area of the 1024 px canvas, so current macOS presents it without an added backing plate. The 16 pt slot uses simplified artwork with 1.25 turns and a thicker stick; 32 pt and larger use the full artwork. Colors are `#9C4432`–`#6B2A1E` (background gradient), `#FFF4EC` (cream), and `#F08A72` (coral). They identify the application outside its windows and are not interface tokens.
 
 ## Do's and Don'ts
 
