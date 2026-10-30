@@ -2,7 +2,9 @@
 
 Candy is a native macOS image utility with a Rust CLI and a Swift/AppKit editor.
 Read README.md for commands and limits, PRODUCT.md for scope, and DESIGN.md for
-implemented UI conventions. Keep shared pixel operations in `candy-core`,
+implemented UI conventions. Website work follows `docs/website-brief.md`,
+`docs/website-design.md`, and `docs/website.md`; `site/` deploys as committed,
+so keep all three locales aligned. Keep shared pixel operations in `candy-core`,
 Image I/O and Vision in `candy-macos`, and the owned C boundary in `candy-ffi`.
 The `candy` crate is CLI/terminal/launcher only. AppKit UI and document coordination
 live in the SwiftPM package under `macos`.
@@ -35,6 +37,8 @@ live in the SwiftPM package under `macos`.
 ## Fork packaging and local installation
 
 - Work on `theand-fork`; keep upstream changes available for later rebase.
+- Use `.agents/skills/ciao-update-personal-fork` for upstream update or rebase
+  work so the fork-specific identity and behavior stay explicit.
 - Reuse `.agents/skills/ciao-package-macos-dmg` (Mackup SSOT), not a separate
   Candy packaging skill. Build fresh with `scripts/build-app.sh`, then package
   `dist/Candy-theand-fork.app`. See `docs/releasing.md` for the command.
