@@ -8,7 +8,7 @@ struct CLIImport: Sendable {
 
   static var cacheRoot: URL {
     FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(
-      "Library/Caches/me.told.candy.app/stdin", isDirectory: true)
+      "Library/Caches/me.told.candy.theand-fork.app/stdin", isDirectory: true)
   }
 
   static func recognize(_ url: URL, root: URL = cacheRoot) -> CLIImport? {

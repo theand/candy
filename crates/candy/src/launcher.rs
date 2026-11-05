@@ -16,7 +16,7 @@ pub fn launch_image(image: &image::RgbaImage) -> Result<()> {
     let mut command = open_command()?;
     let root = std::env::home_dir()
         .context("Cannot find the user cache directory")?
-        .join("Library/Caches/me.told.candy.app/stdin");
+        .join("Library/Caches/me.told.candy.theand-fork.app/stdin");
     handoff_image(image, &root, |path| {
         command.arg(path);
         run_open(command)
