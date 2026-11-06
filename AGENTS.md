@@ -40,7 +40,9 @@ live in the SwiftPM package under `macos`.
 - Use `.agents/skills/ciao-update-personal-fork` for upstream update or rebase
   work so the fork-specific identity and behavior stay explicit.
 - Reuse `.agents/skills/ciao-package-macos-dmg` (Mackup SSOT), not a separate
-  Candy packaging skill. Build fresh with `scripts/build-app.sh`, then package
+  Candy packaging skill. Build fresh with
+  `CANDY_BUILD_VERSION=<YYYYMMDD.HHMM> scripts/build-app.sh` (the skill's build
+  version; unset keeps the crate version as `CFBundleVersion`), then package
   `dist/Candy-theand-fork.app`. See `docs/releasing.md` for the command.
 - Install the exact verified DMG bundle at `/Applications/Candy-theand-fork.app`,
   preserving its signature. Quit the target normally before replacing it.

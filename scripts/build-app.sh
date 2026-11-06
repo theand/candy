@@ -6,6 +6,12 @@ export MACOSX_DEPLOYMENT_TARGET=14.0
 candy_version=$(cargo pkgid -p candy)
 candy_version=${candy_version##*#}
 candy_version=${candy_version##*@}
+# CFBundleVersion: the crate version unless a packager stamps a build version.
+candy_build_version=${CANDY_BUILD_VERSION:-$candy_version}
+case "$candy_build_version" in
+    ''|.*|*.|*..*|*[!0-9.]*)
+        echo "CANDY_BUILD_VERSION must be dot-separated digits: $candy_build_version" >&2; exit 2 ;;
+esac
 case "${1:-release}" in
     release) candy_profile=release; set -- --release ;;
     --debug) candy_profile=debug; set -- ;;
@@ -76,7 +82,7 @@ cat > "$candy_app/Contents/Info.plist" <<'PLIST'
 </dict></plist>
 PLIST
 plutil -replace CFBundleShortVersionString -string "$candy_version" "$candy_app/Contents/Info.plist"
-plutil -replace CFBundleVersion -string "$candy_version" "$candy_app/Contents/Info.plist"
+plutil -replace CFBundleVersion -string "$candy_build_version" "$candy_app/Contents/Info.plist"
 plutil -lint "$candy_app/Contents/Info.plist"
 # The Swift and Metal toolchains link rpaths that only exist on the build machine
 # (Xcode.app, the Metal toolchain cryptex). Gatekeeper treats a load command path
