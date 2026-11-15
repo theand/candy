@@ -24,7 +24,8 @@ Local builds are ad-hoc signed; DMG packaging does not notarize them.
 ## Public distribution
 
 Releases currently target **Apple Silicon on macOS 14+**. Build on an Apple
-Silicon Mac with Rust 1.95+ and Xcode 16+ (Swift 6). CI checks source builds;
+Silicon Mac with Rust 1.100+ and Xcode 16+ (Swift 6). The fork's exact Rust
+toolchain is pinned in `rust-toolchain.toml`. CI checks source builds;
 the maintainer's Mac signs and notarizes public release artifacts.
 
 ## One-time authentication

@@ -11,7 +11,10 @@ live in the SwiftPM package under `macos`.
 
 ## Build and verification
 
-- Requires macOS 14+, Rust 1.95+, and Xcode 16+ with Swift 6. Native decoding and OCR tests require macOS;
+- Requires macOS 14+, Rust 1.100+, and Xcode 16+ with Swift 6.
+  Rust 1.100.0 is pinned in `rust-toolchain.toml` (2026-11-15 user-approved fork
+  baseline; [decision and coupled files](docs/plans/2026-11-15-rust-1100-baseline.md)).
+  Native decoding and OCR tests require macOS;
   initial interactive validation was on Apple Silicon, not Intel.
 - Use `cargo fmt --all --check`,
   `cargo clippy --locked --workspace --all-targets -- -D warnings`, and

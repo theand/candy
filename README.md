@@ -41,13 +41,15 @@ To update, quit Candy and run `brew update && brew upgrade --cask candy`.
 
 ## Build and run
 
-Install Rust 1.95 or newer and Xcode 16 or newer (Swift 6), then build the
+Install Rust 1.100 or newer and Xcode 16 or newer (Swift 6), then build the
 application and CLI together from this repository:
 
 ```sh
 scripts/build-app.sh
 ./target/release/candy edit photo.png
 ```
+
+This fork pins Rust 1.100.0 with clippy and rustfmt in `rust-toolchain.toml`.
 
 Install just the CLI into Cargo's bin directory (make sure it is on your PATH):
 
