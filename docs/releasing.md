@@ -8,18 +8,45 @@ and installation; no separate project skill is needed. Its packaging script
 can be run from this repository after a fresh Release build:
 
 ```sh
-scripts/build-app.sh
+build_version="$(date +%Y%m%d.%H%M)"
+CANDY_BUILD_VERSION="$build_version" scripts/build-app.sh
 bash .agents/skills/ciao-package-macos-dmg/scripts/package_dmg.sh \
   --app dist/Candy-theand-fork.app
 ```
 
 Add `--overwrite` only to intentionally replace the same versioned DMG.
-For installation, quit the fork normally, mount the verified DMG read-only,
-and copy its `Candy-theand-fork.app` to `/Applications/Candy-theand-fork.app`.
-Preserve the signature, verify the installed signature and executable checksum
-against the mounted app, detach the DMG, and launch the installed app.
+Install that exact DMG once with the shared installer:
+
+```sh
+bash .agents/skills/ciao-package-macos-dmg/scripts/install_from_dmg.sh \
+  --dmg "<generated-dmg>" --dest /Applications/Candy-theand-fork.app
+```
+
+The installer verifies the mounted image, safely replaces the previous app via
+Trash, compares the complete installed bundle, and launches the exact path.
+Reuse those results; no extra mount, signature/hash pass, or source rebuild.
 Never use `/Applications/Candy.app`, the upstream Homebrew destination.
 Local builds are ad-hoc signed; DMG packaging does not notarize them.
+
+### Build dependencies and routine checks
+
+`scripts/build-app.sh` runs one Cargo build for the CLI and FFI library, then
+SwiftPM, then bundle assembly and signing. Cargo already builds independent
+crates in parallel. Swift links `target/<profile>/libcandy_ffi.a` (or the
+`CARGO_TARGET_DIR` equivalent); keep Rust → Swift linking in that order. Do not
+start a second Cargo build for the CLI or split Swift compilation/linking just
+for packaging. SwiftPM handles its own compilation jobs.
+
+The local fork flow uses the build script's plist/signature checks and the
+shared packager/installer checks once each. Rust/Swift tests, clippy, dependency
+audits, GUI checks and `scripts/release.sh` belong to implementation or explicit
+public-release work; do not add them to a routine personal DMG run. Skip
+Gatekeeper assessment for this known unnotarized build unless requested.
+
+Finish the shared skill's copy/hash and eligible tag steps, then run its
+project-scoped cache cleanup last. Keep caches throughout build, packaging and
+installation; cleanup may remove `target/` and `macos/.build/` after the verified
+shared DMG exists. The public distribution procedure below is a separate flow.
 
 ## Public distribution
 
